@@ -18,7 +18,7 @@ export interface Recommendation {
 })
 export class MovieService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = '/api';
   getMovies(): Observable<Movie[]> {
     return this.http.get<Movie[]>(`${this.apiUrl}/movies`);
   }
