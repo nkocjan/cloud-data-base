@@ -1,0 +1,29 @@
+{
+  "name": "cloud-data-base",
+  "version": "1.0.0",
+  "description": "Data base project for AGH University with Neo4j database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nkocjan/cloud-data-base.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nkocjan/cloud-data-base/issues"
+  },
+  "homepage": "https://github.com/nkocjan/cloud-data-base#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "neo4j-driver": "^6.0.1",
+    "path": "^0.12.7"
+  }
+}

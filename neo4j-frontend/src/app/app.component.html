@@ -1,0 +1,136 @@
+<div class="container">
+  <header>
+    <h1>Neo4j Movie Manager</h1>
+    <p>System rekomendacji i zarządzania bazą grafową</p>
+  </header>
+
+  <nav class="tabs">
+    <button
+      [class.active]="activeTab === 'search'"
+      (click)="activeTab = 'search'"
+    >
+      Rekomendacje
+    </button>
+    <button
+      [class.active]="activeTab === 'admin'"
+      (click)="activeTab = 'admin'"
+    >
+      Panel Administratora
+    </button>
+  </nav>
+
+  <main>
+    @if (activeTab === 'search') {
+    <div class="tab-content">
+      <section class="card recommendation-panel">
+        <h2>Znajdź rekomendacje</h2>
+        <div class="control-group">
+          <label>Wybierz Aktora:</label>
+          <select [(ngModel)]="selectedActor" (change)="onActorChange()">
+            <option value="" disabled>-- Lista Aktorów --</option>
+            @for (actor of actors; track actor) {
+            <option [value]="actor">{{ actor }}</option>
+            }
+          </select>
+        </div>
+
+        @if (selectedActor) {
+        <div class="results-area">
+          <h3>
+            Wyniki dla: <span class="highlight">{{ selectedActor }}</span>
+          </h3>
+
+          @if (isLoading) {
+          <p>Ładowanie...</p>
+          } @else if (recommendations.length === 0) {
+          <p>Brak rekomendacji.</p>
+          } @else {
+          <ul class="rec-list">
+            @for (rec of recommendations; track rec.title) {
+            <li>
+              <span class="rec-title">{{ rec.title }}</span>
+
+              <div class="tooltip-container">
+                <span class="rec-score">Siła: {{ rec.score }}</span>
+                <span class="tooltip-text">
+                  Liczba "ścieżek" w grafie łączących wybranego aktora z tym
+                  filmem (poprzez innych aktorów). Im więcej, tym pewniejsza
+                  rekomendacja.
+                </span>
+              </div>
+            </li>
+            }
+          </ul>
+          }
+        </div>
+        }
+      </section>
+    </div>
+    } @if (activeTab === 'admin') {
+    <div class="tab-content admin-grid">
+      <section class="card">
+        <h3>Dodaj Aktora</h3>
+        <div class="form-group">
+          <input placeholder="Imię i nazwisko" [(ngModel)]="newActorName" />
+          <button (click)="handleAddActor()">Dodaj</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Dodaj Film</h3>
+        <div class="form-group">
+          <input placeholder="Tytuł filmu" [(ngModel)]="newMovieTitle" />
+          <input type="number" placeholder="Rok" [(ngModel)]="newMovieYear" />
+          <button (click)="handleAddMovie()">Dodaj</button>
+        </div>
+      </section>
+
+      <section class="card full-width">
+        <h3>Przypisz Aktora do Filmu</h3>
+        <div class="form-group row">
+          <select [(ngModel)]="relActor">
+            <option value="" disabled>Wybierz Aktora</option>
+            @for (a of actors; track a) {
+            <option [value]="a">{{ a }}</option>
+            }
+          </select>
+
+          <span class="arrow">➡️ grał w ➡️</span>
+
+          <select [(ngModel)]="relMovie">
+            <option value="" disabled>Wybierz Film</option>
+            @for (m of movies; track m.title) {
+            <option [value]="m.title">{{ m.title }}</option>
+            }
+          </select>
+
+          <button (click)="handleAddRelationship()">Połącz</button>
+        </div>
+      </section>
+    </div>
+    }
+
+    <section class="card database-preview mt-4">
+      <h2>Baza Filmów ({{ movies.length }})</h2>
+      <p class="hint">Najedź na film, aby zobaczyć obsadę.</p>
+      <div class="tags">
+        @for (movie of movies; track movie.title) {
+
+        <div class="tooltip-container">
+          <span class="tag">
+            {{ movie.title }} <small>({{ movie.year }})</small>
+          </span>
+
+          <div class="tooltip-text movie-tooltip">
+            <strong>Obsada:</strong><br />
+            @if (movie.actors.length > 0) {
+            {{ movie.actors.join(", ") }}
+            } @else { (Brak danych o aktorach) }
+          </div>
+        </div>
+
+        }
+      </div>
+    </section>
+  </main>
+</div>
